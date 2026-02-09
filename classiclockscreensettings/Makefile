@@ -1,22 +1,16 @@
-ARCHS = arm64
-GO_EASY_ON_ME = 1
-include $(THEOS)/makefiles/common.mk
+This is the original file
 
-TWEAK_NAME = ClassicLockScreen
+ARCHS = armv7 arm64
+include theos/makefiles/common.mk
 
-ClassicLockScreen_FILES = iOS9.xm iOS10.xm $(wildcard *.mm) $(wildcard *.m)
-ClassicLockScreen_FRAMEWORKS = UIKit QuartzCore CoreGraphics MediaPlayer AudioToolbox Accelerate IOKit
-ClassicLockScreen_PRIVATE_FRAMEWORKS = ManagedConfiguration MediaRemote MediaPlayerUI
-ClassicLockScreen_LIBRARIES = MobileGestalt z
+BUNDLE_NAME = ClassicLockScreenSettings
+ClassicLockScreenSettings_FILES = ClassicLockScreenSettings.mm
+ClassicLockScreenSettings_INSTALL_PATH = /Library/PreferenceBundles
+ClassicLockScreenSettings_FRAMEWORKS = UIKit
+ClassicLockScreenSettings_PRIVATE_FRAMEWORKS = Preferences
 
-# THIS IS THE KEY LINE - Add -include dlfcn.h and remove DRM.pch
-ClassicLockScreen_CFLAGS = -fobjc-arc -include dlfcn.h
+include $(THEOS_MAKE_PATH)/bundle.mk
 
-include $(THEOS_MAKE_PATH)/tweak.mk
-
-after-install::
-	install.exec "killall -9 SpringBoard"
-
-SUBPROJECTS += classiclockscreensettings
-SUBPROJECTS += classiclockscreenextractlegacy
-include $(THEOS_MAKE_PATH)/aggregate.mk
+internal-stage::
+	$(ECHO_NOTHING)mkdir -p $(THEOS_STAGING_DIR)/Library/PreferenceLoader/Preferences$(ECHO_END)
+	$(ECHO_NOTHING)cp entry.plist $(THEOS_STAGING_DIR)/Library/PreferenceLoader/Preferences/ClassicLockScreenSettings.plist$(ECHO_END)
