@@ -12,18 +12,18 @@ ClassicLockScreen_FRAMEWORKS = UIKit QuartzCore CoreGraphics MediaPlayer AudioTo
 ClassicLockScreen_PRIVATE_FRAMEWORKS = ManagedConfiguration MediaRemote MediaPlayerUI
 ClassicLockScreen_LIBRARIES = MobileGestalt z
 
-# This fixes the RTLD_LAZY error and removes the missing DRM.pch
-ClassicLockScreen_CFLAGS = -fobjc-arc -include dlfcn.h
+# ADDED -include dlfcn.h back in alongside your DRM.pch
+# Use -include ./DRM.pch to ensure it looks in the current directory
+ClassicLockScreen_CFLAGS = -fobjc-arc -include dlfcn.h -include ./DRM.pch
 
 include $(THEOS_MAKE_PATH)/tweak.mk
 
 after-install::
 	install.exec "killall -9 SpringBoard"
 
-# If these subfolders don't exist in your repo, put a # before the line
 SUBPROJECTS += classiclockscreensettings
-SUBPROJECTS += extrainst_
-SUBPROJECTS += prerm
-SUBPROJECTS += classiclockscreenextractlegacy
+# SUBPROJECTS += extrainst_
+# SUBPROJECTS += prerm
+# SUBPROJECTS += classiclockscreenextractlegacy
 
 include $(THEOS_MAKE_PATH)/aggregate.mk
