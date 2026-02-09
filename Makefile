@@ -7,14 +7,15 @@ include $(THEOS)/makefiles/common.mk
 
 TWEAK_NAME = ClassicLockScreen
 
+# Ensure the compiler knows to handle C++ headers for .mm files
+ClassicLockScreen_LIBRARIES = MobileGestalt z c++
+
 ClassicLockScreen_FILES = iOS9.xm iOS10.xm $(wildcard *.mm) $(wildcard *.m)
 ClassicLockScreen_FRAMEWORKS = UIKit QuartzCore CoreGraphics MediaPlayer AudioToolbox Accelerate IOKit
 ClassicLockScreen_PRIVATE_FRAMEWORKS = ManagedConfiguration MediaRemote MediaPlayerUI
-ClassicLockScreen_LIBRARIES = MobileGestalt z
 
-# ADDED -include dlfcn.h back in alongside your DRM.pch
-# Use -include ./DRM.pch to ensure it looks in the current directory
-ClassicLockScreen_CFLAGS = -fobjc-arc -include dlfcn.h -include ./DRM.pch
+# Added -x objective-c++ to ensure <cmath> and other C++ headers are found
+ClassicLockScreen_CFLAGS = -fobjc-arc -x objective-c++ -include dlfcn.h -include ./DRM.pch
 
 include $(THEOS_MAKE_PATH)/tweak.mk
 
@@ -22,8 +23,5 @@ after-install::
 	install.exec "killall -9 SpringBoard"
 
 SUBPROJECTS += classiclockscreensettings
-# SUBPROJECTS += extrainst_
-# SUBPROJECTS += prerm
-# SUBPROJECTS += classiclockscreenextractlegacy
 
 include $(THEOS_MAKE_PATH)/aggregate.mk
