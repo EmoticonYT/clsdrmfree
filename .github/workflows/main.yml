@@ -6,7 +6,7 @@ jobs:
     runs-on: macos-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           submodules: recursive
 
@@ -14,7 +14,7 @@ jobs:
         uses: Randomblock1/theos-action@v1
         with:
           theos-src: https://github.com/theos/theos
-          theos-sdks: https://github.com/theos/sdks # This gets the headers you need
+          theos-sdks: https://github.com/theos/sdks 
 
       - name: Build Package
         run: |
@@ -24,8 +24,7 @@ jobs:
           THEOS: ${{ github.workspace }}/theos
 
       - name: Upload Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ClassicLockScreen-DEB
           path: packages/*.deb
-          
