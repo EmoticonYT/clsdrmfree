@@ -1,0 +1,31 @@
+name: Build Tweak
+on: [push, pull_request, workflow_dispatch]
+
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+
+      - name: Setup Theos
+        uses: Randomblock1/theos-action@v1
+        with:
+          theos-src: https://github.com/theos/theos
+          theos-sdks: https://github.com/theos/sdks # This gets the headers you need
+
+      - name: Build Package
+        run: |
+          export TARGET=iphone:clang:11.2:10.0
+          make package FINALPACKAGE=1
+        env:
+          THEOS: ${{ github.workspace }}/theos
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: ClassicLockScreen-DEB
+          path: packages/*.deb
+          
