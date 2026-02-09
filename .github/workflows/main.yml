@@ -18,7 +18,7 @@ jobs:
 
       - name: Build Package
         run: |
-          export TARGET=iphone:clang:11.2:10.0
+          export TARGET=iphone:clang:10.3:10.0
           make package FINALPACKAGE=1
         env:
           THEOS: ${{ github.workspace }}/theos
